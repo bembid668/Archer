@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block login %}
+    {% with user.username as username %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block content %}
+    <div class="panel right">
+        <h1>Create an Archer</h1>
+        <p>
+            <form action="/submit" method="post">
+            {% for field in Archer_form %}{% csrf_token %}
+            {{ field }}
+            {% endfor %}
+            <input type="hidden" value="{{ next_url }}" name="next_url">
+            <input type="submit" value="Archer!">
+            </form>
+        </p>
+    </div>
+    <div class="panel left">
+        <h1>Buddies' Archers</h1>
+        {% for Archer in Archers %}
+        <div class="ArcherWrapper">
+            <a href="/users/{{ Archer.user.username }}">
+                <img class="avatar" src="{{ Archer.user.profile.gravatar_url }}">
+                <span class="name">{{ Archer.user.first_name }}</span>
+            </a>
+            @{{ Archer.user.username }}
+            <p>
+                {{ Archer.content }}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}
